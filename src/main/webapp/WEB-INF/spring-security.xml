@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:security="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+            http://www.springframework.org/schema/security
+            http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+    
+    <security:http access-denied-page="/app/auth/denied" auto-config="false"  use-expressions="true"
+                   entry-point-ref="LoginUrlAuthenticationEntryPoint">
+        <security:custom-filter position="CONCURRENT_SESSION_FILTER" ref="concurrencyFilter" />
+
+        <security:custom-filter ref="authenticationFilter" position="FORM_LOGIN_FILTER"></security:custom-filter>
+        
+        <security:intercept-url pattern="/j_spring_security_check" requires-channel="any" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <security:intercept-url pattern="/app/auth/**" requires-channel="any" access="permitAll"/>
+        <security:intercept-url pattern="/app/rest/**" requires-channel="any" access="permitAll"/>
+        <security:intercept-url pattern="/app/**" requires-channel="any" access="hasRole('ROLE_ADMIN') or hasRole('USER')" />
+        
+        <security:session-management session-authentication-strategy-ref="sas"/>
+        
+        <security:csrf />
+    </security:http>
+
+    <beans:bean id="LoginUrlAuthenticationEntryPoint"
+                class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <beans:property name="loginFormUrl" value="/app/auth/login" />
+    </beans:bean>
+ 
+    <beans:bean id="authenticationFilter"
+                class="com.stricore.as400.security.UsernamePasswordWithTimeoutAuthenticationFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager" />
+        <beans:property name="authenticationSuccessHandler" ref="authenticationSuccessHandler" />
+        <beans:property name="authenticationFailureHandler" ref="authenticationFailureHandler" />
+        <beans:property name="filterProcessesUrl" value="/j_spring_security_check" />
+        <beans:property name="usernameParameter" value="j_username" />
+        <beans:property name="passwordParameter" value="j_password" />
+        <beans:property name="timeoutParameter" value="timeout" />
+        <beans:property name="sessionAuthenticationStrategy" ref="sas" />
+    </beans:bean>
+    
+    <beans:bean id="concurrencyFilter"
+                class="org.springframework.security.web.session.ConcurrentSessionFilter">
+        <beans:property name="sessionRegistry" ref="sessionRegistry" />
+        <beans:property name="expiredUrl" value="/app/auth/login?message=5" />
+    </beans:bean>
+    
+    <beans:bean id="sas" class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+        <beans:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+        <beans:property name="maximumSessions" value="1" />
+    </beans:bean>
+
+    <beans:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+     
+    <beans:bean id="authenticationFailureHandler"
+                class="com.stricore.as400.security.CustomAuthenticationFailureHandler">
+        <beans:property name="defaultFailureUrl" value="/app/auth/login?message=1"/>
+        <beans:property name="expiredUrl" value="/app/auth/login?message=3"/>
+    </beans:bean>
+     
+    <beans:bean id="authenticationSuccessHandler"
+                class="com.stricore.as400.security.CustomAuthenticationSuccessHandler">
+    </beans:bean>
+ 
+     
+    <beans:bean id="authenticationProvider"
+                class="com.stricore.as400.security.CustomAuthenticationProvider">
+        <beans:property name="nonceValiditySeconds" value="10"/>
+        <beans:property name="key" value="KEY"/>
+    </beans:bean>
+     
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="authenticationProvider"/>
+    </security:authentication-manager>
+
+
+</beans:beans>
+
