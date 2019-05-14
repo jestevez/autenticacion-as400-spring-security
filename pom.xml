@@ -11,7 +11,7 @@
 
     <properties>
         <org.springframework-version>5.1.2.RELEASE</org.springframework-version>
-        <spring.security.version>5.1.2.RELEASE</spring.security.version>
+        <spring.security.version>5.1.5.RELEASE</spring.security.version>
         <org.aspectj-version>1.6.9</org.aspectj-version>
         <sl4j.version>1.7.5</sl4j.version>
         <spring.security.oauth2.version>2.0.17.RELEASE</spring.security.oauth2.version>
