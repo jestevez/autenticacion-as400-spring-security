@@ -15,7 +15,7 @@
         <org.aspectj-version>1.6.9</org.aspectj-version>
         <sl4j.version>1.7.5</sl4j.version>
         <spring.security.oauth2.version>2.0.17.RELEASE</spring.security.oauth2.version>
-        <quartz.version>2.2.1</quartz.version>
+        <quartz.version>2.3.2</quartz.version>
         <mojarra.version>2.3.2</mojarra.version>
         <jackson.version>2.9.9</jackson.version>
         <jackson-databind.version>2.9.10.4</jackson-databind.version>
