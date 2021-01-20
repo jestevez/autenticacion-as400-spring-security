@@ -18,7 +18,7 @@
         <quartz.version>2.2.1</quartz.version>
         <mojarra.version>2.3.2</mojarra.version>
         <jackson.version>2.9.9</jackson.version>
-        <jackson-databind.version>2.9.10.4</jackson-databind.version>
+        <jackson-databind.version>2.9.10.7</jackson-databind.version>
         <jersey.version>2.6</jersey.version>
 
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
