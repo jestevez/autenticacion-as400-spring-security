@@ -10,7 +10,7 @@
     <name>autenticacion-as400-spring-security</name>
 
     <properties>
-        <org.springframework-version>5.2.3.RELEASE</org.springframework-version>
+        <org.springframework-version>5.2.20.RELEASE</org.springframework-version>
         <spring.security.version>5.3.3.RELEASE</spring.security.version>
         <org.aspectj-version>1.6.9</org.aspectj-version>
         <sl4j.version>1.7.5</sl4j.version>
